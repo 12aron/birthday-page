@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,19 +24,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch full static site from upstream
+      - name: Bootstrap site/ from upstream (first run only)
         run: |
           set -e
+          if [ -f site/index.html ]; then
+            echo "site/ already present, skip bootstrap"
+            exit 0
+          fi
+          echo "site/ missing, importing upstream static site"
           curl -fsSL -o src.zip https://codeload.github.com/ayusharma/birthday/zip/refs/heads/master
           unzip -q src.zip
           mkdir -p site
           cp -r birthday-master/. site/
-          ls -la site | head -40
+          rm -f site/.gitignore
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          git diff --cached --quiet && echo "nothing to commit" || git commit -m "Bootstrap site/ from upstream [skip ci]"
+          git push origin HEAD:main
+          rm -f src.zip
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
