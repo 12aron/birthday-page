@@ -170,6 +170,35 @@
 <script src="vendor/bootstrap.min.js"></script>
 <script src="effect.js"></script>
 <script>
+  /* 逐句展示祝福语，最后一句停留在屏幕上 */
+  (function () {
+    if (!window.jQuery) { return; }
+    jQuery(function ($) {
+      var paras = $('.message p');
+      if (!paras.length) { return; }
+      $('#story').off('click');
+      $('#story').on('click', function () {
+        $(this).fadeOut('slow');
+        $('.cake').fadeOut('fast').promise().done(function () {
+          $('.message').fadeIn('slow');
+        });
+        paras.hide();
+        var i = 0;
+        (function next() {
+          if (i >= paras.length) { return; }
+          var p = paras.eq(i);
+          p.fadeIn(1000);
+          i++;
+          if (i < paras.length) {
+            setTimeout(function () { p.fadeOut(500, next); }, 2000);
+          }
+        })();
+        return false;
+      });
+    });
+  })();
+</script>
+<script>
   /* Fallback: reveal the page even if a vendor script fails to load */
   (function () {
     function reveal() {
