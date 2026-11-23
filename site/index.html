@@ -9,7 +9,7 @@
 	<meta charset="UTF-8" />
 	<meta name="description" content="Happy Birthday Xola">
 	<meta name="robots" content="index, follow" />
-	<link rel="author" href="https://plus.google.com/u/1/+AyushSharma1/" /> 
+	<link rel="author" href="https://plus.google.com/u/1/+AyushSharma1/" />
     <meta name="keywords" content="Birthday, Happy">
     <!-- Strat of Facebook Meta -->
     <meta property="og:type" content="E-Greeting" />
@@ -20,13 +20,11 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="vendor/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="stylesheet.css">
 	<link rel="stylesheet" type="text/css" href="loading.css">
-	<link href='http://fonts.googleapis.com/css?family=Signika' rel='stylesheet' type='text/css'>
-	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'> -->
 	<link rel="stylesheet/less" href="cake.less">
-	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.1.0/less.min.js"></script>
+	<script src="vendor/less.min.js"></script>
 </head>
 
 <body>
@@ -44,10 +42,10 @@
 	<div class="balloons text-center" id="b3">
     	<h2 style="color:#D14D39;">D</h2>
     </div>
-	<div class="balloons text-center" id="b4">
+    <div class="balloons text-center" id="b4">
     	<h2 style="color:#8FAD00;">X</h2>
     </div>
-	<div class="balloons text-center" id="b5">
+    <div class="balloons text-center" id="b5">
     	<h2 style="color:#8377E4;">O</h2>
     </div>
     <div class="balloons text-center" id="b6">
@@ -167,32 +165,25 @@
 					<!-- <button class="btn btn-primary" id="cake_cut">Lrt's Cut the Cake</button> -->
 				</div>
 			</div>
-			<!-- <div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-2">
-			</div> -->
 		</div>
 
 
 	</div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="vendor/jquery.min.js"></script>
+<script src="vendor/bootstrap.min.js"></script>
 <script src="effect.js"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-58229732-1', 'auto');
-  ga('send', 'pageview');
-
+  /* Fallback: reveal the page even if a vendor script fails to load */
+  (function () {
+    function reveal() {
+      var box = document.querySelector('.container');
+      if (box) { box.style.display = 'block'; }
+      var loader = document.querySelector('.loading');
+      if (loader) { loader.style.display = 'none'; }
+    }
+    window.addEventListener('load', function () { setTimeout(reveal, 600); });
+    setTimeout(reveal, 8000);
+  })();
 </script>
 </html>

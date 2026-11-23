@@ -24,25 +24,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Bootstrap site/ from upstream (first run only)
+      - name: Provision site assets (first run only)
         run: |
           set -e
-          if [ -f site/index.html ]; then
-            echo "site/ already present, skip bootstrap"
-            exit 0
+          changed=0
+          if [ ! -f site/index.html ]; then
+            echo "importing upstream static site"
+            curl -fsSL -o src.zip https://codeload.github.com/ayusharma/birthday/zip/refs/heads/master
+            unzip -q src.zip
+            mkdir -p site
+            cp -r birthday-master/. site/
+            rm -f site/.gitignore src.zip
+            changed=1
           fi
-          echo "site/ missing, importing upstream static site"
-          curl -fsSL -o src.zip https://codeload.github.com/ayusharma/birthday/zip/refs/heads/master
-          unzip -q src.zip
-          mkdir -p site
-          cp -r birthday-master/. site/
-          rm -f site/.gitignore
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A site
-          git diff --cached --quiet && echo "nothing to commit" || git commit -m "Bootstrap site/ from upstream [skip ci]"
-          git push origin HEAD:main
-          rm -f src.zip
+          if [ ! -f site/vendor/jquery.min.js ]; then
+            echo "vendoring jquery / bootstrap / less.js"
+            mkdir -p site/vendor
+            curl -fsSL -o site/vendor/jquery.min.js https://cdn.jsdelivr.net/npm/jquery@1.11.2/dist/jquery.min.js
+            curl -fsSL -o site/vendor/bootstrap.min.css https://cdn.jsdelivr.net/npm/bootstrap@3.3.1/dist/css/bootstrap.min.css
+            curl -fsSL -o site/vendor/bootstrap.min.js https://cdn.jsdelivr.net/npm/bootstrap@3.3.1/dist/js/bootstrap.min.js
+            curl -fsSL -o site/vendor/less.min.js https://cdn.jsdelivr.net/npm/less@2.1.0/dist/less.min.js
+            changed=1
+          fi
+          if [ "$changed" = "1" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A site
+            git diff --cached --quiet || git commit -m "Provision site assets [skip ci]"
+            git push origin HEAD:main
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
